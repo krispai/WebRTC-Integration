@@ -6,9 +6,11 @@ target 'KrWebRTC' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # Pods for KrWebRTC
+  pod 'Starscream', '~> 4.0.4'
+
   target 'KrWebRTCTests' do
     inherit! :search_paths
-    pod 'Starscream', '~> 4.0.4'
     # Pods for testing
   end
 
