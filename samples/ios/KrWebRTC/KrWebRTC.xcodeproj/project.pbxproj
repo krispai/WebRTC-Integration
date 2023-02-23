@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		880C84BB299677AD00DE01A3 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 880C84B82996773300DE01A3 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8835AC6429A3BBC700184202 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 880C84B82996773300DE01A3 /* WebRTC.xcframework */; };
 		8835AC6529A3BC4400184202 /* libKrispAudioProcessor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885058C929A3B734003F9308 /* libKrispAudioProcessor.a */; };
 		8835AC6829A3BCCC00184202 /* c6.f.s.ced125.kw in Resources */ = {isa = PBXBuildFile; fileRef = 8835AC6729A3BCCC00184202 /* c6.f.s.ced125.kw */; };
 		8835AC6E29A4B02300184202 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8835AC6A29A3C07000184202 /* Accelerate.framework */; };
@@ -18,6 +16,9 @@
 		883E5178299A177D0062E2FE /* RTCStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E5177299A177D0062E2FE /* RTCStates.swift */; };
 		883E517A299A17BA0062E2FE /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E5179299A17BA0062E2FE /* SessionDescription.swift */; };
 		883E517C299A18890062E2FE /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E517B299A18890062E2FE /* IceCandidate.swift */; };
+		88404B4329A7890E002D61B6 /* krisp-ios-sdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4229A7890E002D61B6 /* krisp-ios-sdk.xcframework */; };
+		88404B4429A78A0E002D61B6 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4029A78903002D61B6 /* WebRTC.xcframework */; };
+		88404B4529A78A71002D61B6 /* krisp-ios-sdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4229A7890E002D61B6 /* krisp-ios-sdk.xcframework */; };
 		8846C24229952EBF006F2382 /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8846C24129952EBF006F2382 /* WebSocketClient.swift */; };
 		885058BC29A3B188003F9308 /* WebRTCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058BB29A3B188003F9308 /* WebRTCProtocol.swift */; };
 		885058BE29A3B252003F9308 /* WebRTCClient+PeerConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058BD29A3B252003F9308 /* WebRTCClient+PeerConnection.swift */; };
@@ -27,8 +28,8 @@
 		885058D329A3B7D3003F9308 /* SignalingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058D229A3B7D3003F9308 /* SignalingClientProtocol.swift */; };
 		885058DA29A3B839003F9308 /* KrispAudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 885058D529A3B839003F9308 /* KrispAudioProcessor.mm */; };
 		885058DB29A3B839003F9308 /* KrispProcessingModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 885058D729A3B839003F9308 /* KrispProcessingModule.mm */; };
-		885058DE29A3B93D003F9308 /* libkrisp-audio-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885058DD29A3B93D003F9308 /* libkrisp-audio-sdk.a */; };
-		885058DF29A3B967003F9308 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 880C84B82996773300DE01A3 /* WebRTC.xcframework */; };
+		88A58BD229A78BDD00E8C691 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4029A78903002D61B6 /* WebRTC.xcframework */; };
+		88A58BD529A78D2800E8C691 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4029A78903002D61B6 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88BBB58F29795E30003DD32B /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BBB58E29795E30003DD32B /* WebRTCClient.swift */; };
 		88D4CE97297913E800ED8F17 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4CE96297913E800ED8F17 /* AppDelegate.swift */; };
 		88D4CE99297913E800ED8F17 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4CE98297913E800ED8F17 /* SceneDelegate.swift */; };
@@ -65,7 +66,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				880C84BB299677AD00DE01A3 /* WebRTC.xcframework in Embed Frameworks */,
+				88A58BD529A78D2800E8C691 /* WebRTC.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +83,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		880C84B82996773300DE01A3 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		8835AC6729A3BCCC00184202 /* c6.f.s.ced125.kw */ = {isa = PBXFileReference; lastKnownFileType = file; path = c6.f.s.ced125.kw; sourceTree = "<group>"; };
 		8835AC6929A3BE8F00184202 /* KrWebRTC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KrWebRTC-Bridging-Header.h"; sourceTree = "<group>"; };
 		8835AC6A29A3C07000184202 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -92,6 +92,9 @@
 		883E5177299A177D0062E2FE /* RTCStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCStates.swift; sourceTree = "<group>"; };
 		883E5179299A17BA0062E2FE /* SessionDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDescription.swift; sourceTree = "<group>"; };
 		883E517B299A18890062E2FE /* IceCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceCandidate.swift; sourceTree = "<group>"; };
+		88404B3F29A788EC002D61B6 /* krisp-audio-sdk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "krisp-audio-sdk.hpp"; sourceTree = "<group>"; };
+		88404B4029A78903002D61B6 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
+		88404B4229A7890E002D61B6 /* krisp-ios-sdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "krisp-ios-sdk.xcframework"; sourceTree = "<group>"; };
 		8846C24129952EBF006F2382 /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
 		8846C245299531B3006F2382 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		885058BB29A3B188003F9308 /* WebRTCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCProtocol.swift; sourceTree = "<group>"; };
@@ -105,8 +108,6 @@
 		885058D629A3B839003F9308 /* KrispProcessingModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KrispProcessingModule.h; sourceTree = "<group>"; };
 		885058D729A3B839003F9308 /* KrispProcessingModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KrispProcessingModule.mm; sourceTree = "<group>"; };
 		885058D829A3B839003F9308 /* KrispAudioProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KrispAudioProcessor.h; sourceTree = "<group>"; };
-		885058DD29A3B93D003F9308 /* libkrisp-audio-sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libkrisp-audio-sdk.a"; path = "AudioSDK/libkrisp-audio-sdk.a"; sourceTree = "<group>"; };
-		885058E029A3BAD2003F9308 /* krisp-audio-sdk.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "krisp-audio-sdk.hpp"; path = "AudioSDK/krisp-audio-sdk.hpp"; sourceTree = SOURCE_ROOT; };
 		88660A2B29963A9F00E3CE01 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88BBB58E29795E30003DD32B /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		88CBCE2C29798A0900C9FC7A /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "Pods/WebRTC-lib/WebRTC.xcframework"; sourceTree = "<group>"; };
@@ -130,8 +131,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				885058DF29A3B967003F9308 /* WebRTC.xcframework in Frameworks */,
-				885058DE29A3B93D003F9308 /* libkrisp-audio-sdk.a in Frameworks */,
+				88404B4529A78A71002D61B6 /* krisp-ios-sdk.xcframework in Frameworks */,
+				88404B4429A78A0E002D61B6 /* WebRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,9 +140,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A58BD229A78BDD00E8C691 /* WebRTC.xcframework in Frameworks */,
+				88404B4329A7890E002D61B6 /* krisp-ios-sdk.xcframework in Frameworks */,
 				8835AC6E29A4B02300184202 /* Accelerate.framework in Frameworks */,
 				8835AC6529A3BC4400184202 /* libKrispAudioProcessor.a in Frameworks */,
-				8835AC6429A3BBC700184202 /* WebRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				8835AC6A29A3C07000184202 /* Accelerate.framework */,
-				885058DD29A3B93D003F9308 /* libkrisp-audio-sdk.a */,
 				88660A2B29963A9F00E3CE01 /* Starscream.framework */,
 				8846C245299531B3006F2382 /* Starscream.framework */,
 				88CBCE2C29798A0900C9FC7A /* WebRTC.xcframework */,
@@ -179,14 +180,6 @@
 			children = (
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		880C84B52996743D00DE01A3 /* WebRTCFramework */ = {
-			isa = PBXGroup;
-			children = (
-				880C84B82996773300DE01A3 /* WebRTC.xcframework */,
-			);
-			path = WebRTCFramework;
 			sourceTree = "<group>";
 		};
 		8835AC6629A3BC6900184202 /* Models */ = {
@@ -217,23 +210,41 @@
 			path = Descriptors;
 			sourceTree = "<group>";
 		};
+		88404B3C29A78869002D61B6 /* CustomFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88404B3E29A7889F002D61B6 /* krisp-sdk */,
+				88404B3D29A78893002D61B6 /* webrtc */,
+			);
+			path = CustomFrameworks;
+			sourceTree = "<group>";
+		};
+		88404B3D29A78893002D61B6 /* webrtc */ = {
+			isa = PBXGroup;
+			children = (
+				88404B4029A78903002D61B6 /* WebRTC.xcframework */,
+			);
+			path = webrtc;
+			sourceTree = "<group>";
+		};
+		88404B3E29A7889F002D61B6 /* krisp-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				88404B4229A7890E002D61B6 /* krisp-ios-sdk.xcframework */,
+				88404B3F29A788EC002D61B6 /* krisp-audio-sdk.hpp */,
+			);
+			path = "krisp-sdk";
+			sourceTree = "<group>";
+		};
 		885058CA29A3B734003F9308 /* KrispAudioProcessor */ = {
 			isa = PBXGroup;
 			children = (
-				885058E029A3BAD2003F9308 /* krisp-audio-sdk.hpp */,
 				885058D829A3B839003F9308 /* KrispAudioProcessor.h */,
 				885058D529A3B839003F9308 /* KrispAudioProcessor.mm */,
 				885058D629A3B839003F9308 /* KrispProcessingModule.h */,
 				885058D729A3B839003F9308 /* KrispProcessingModule.mm */,
 			);
 			path = KrispAudioProcessor;
-			sourceTree = "<group>";
-		};
-		885058DC29A3B8DC003F9308 /* AudioSDK */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AudioSDK;
 			sourceTree = "<group>";
 		};
 		88BBB58729795BEC003DD32B /* Services */ = {
@@ -287,10 +298,9 @@
 		88D4CE8A297913E800ED8F17 = {
 			isa = PBXGroup;
 			children = (
+				88404B3C29A78869002D61B6 /* CustomFrameworks */,
 				8835AC6929A3BE8F00184202 /* KrWebRTC-Bridging-Header.h */,
 				8835AC6629A3BC6900184202 /* Models */,
-				885058DC29A3B8DC003F9308 /* AudioSDK */,
-				880C84B52996743D00DE01A3 /* WebRTCFramework */,
 				88D4CE95297913E800ED8F17 /* KrWebRTC */,
 				88D4CEAC297913EA00ED8F17 /* KrWebRTCTests */,
 				88D4CEB6297913EA00ED8F17 /* KrWebRTCUITests */,
