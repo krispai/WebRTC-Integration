@@ -11,6 +11,7 @@
 @interface KrispAudioProcessor : NSObject
 
 - (instancetype)initWithParams:(NSString*)weightFile size:(unsigned int)size;
++ (void)enableAudioFilter:(BOOL)enable;
 
 @end
 

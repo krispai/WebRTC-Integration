@@ -18,24 +18,24 @@ inline std::wstring convertMBString2WString(const std::string& str)
 
 class KrispProcessingModule final
 {
-    std::string m_ProcessorName;
     KrispAudioSessionID _Nullable m_session;
-    
-    int m_SampleRatehz;
-    int m_Numchannels;
-    bool m_IsAppleNC;
+    std::string m_processorName;
+    int m_sampleRateHz;
+    int m_numChannels;
+
+    static bool m_isEnableNC;
 public:
     KrispProcessingModule (const char* __nullable weight, unsigned int blobSize);
     ~KrispProcessingModule( );
+    
+    void static enableNC(const bool isEnable);
 
     void createSession(const int rate);
-    void Reset(const int new_rate);
-    void EnableNC(const bool isEnable);
-    
     void init( );
     void reset( );
+    void resetSampleRate(const int newRate);
     void destroy();
     void setName(const std::string& name);
-    void initSession(int sample_rate_hz, int num_channels);
+    void initSession(const int sampleRateHz, const int numChannels);
     void frameProcess(const size_t channelNumber, const size_t num_bands, const size_t bufferSize, float * _Nonnull buffer);
 };

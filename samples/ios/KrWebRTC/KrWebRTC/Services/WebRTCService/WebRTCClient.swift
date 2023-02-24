@@ -145,6 +145,10 @@ final class WebRTCClient: NSObject {
     func addIceCandidateMessage(remoteCandidate: RTCIceCandidate, completion: @escaping (Error?) -> ()) {
         self.peerConnection.add(remoteCandidate, completionHandler: completion)
     }
+    
+    func enableAudioFilter(enable: Bool) {
+        KrispAudioProcessor.enableAudioFilter(enable)
+    }
 }
 
 extension WebRTCClient {

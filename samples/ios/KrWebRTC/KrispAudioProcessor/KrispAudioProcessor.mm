@@ -35,13 +35,18 @@ RTCProcessingController* _processingController;
     _processingController = [[RTCProcessingController alloc] initWithDelegate: self];
 }
 
++ (void)enableAudioFilter:(BOOL)enable
+{
+    _processingModule->enableNC(enable);
+}
+
 - (void)initializeProcessor {
     _processingModule->init();
 }
 
 - (void)initializeSession:(size_t)sampleRate numChannels:(size_t)numChannels
 {
-    _processingModule->initSession(sampleRate, numChannels);
+    _processingModule->initSession(sampleRate, (int)numChannels);
 }
 
 - (void)name {

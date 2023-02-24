@@ -24,6 +24,7 @@ final class ViewController: UIViewController {
     
     @IBOutlet weak var speakerEnable: UISwitch!
     @IBOutlet weak var microphoneEnable: UISwitch!
+    @IBOutlet weak var enableSDKFilter: UISwitch!
 
     private let signalClient: SignalingClient
     private let webRTCClient: WebRTCClient
@@ -87,6 +88,12 @@ final class ViewController: UIViewController {
         }
     }
 
+    private var isApplyAudioFilter: Bool = false {
+        didSet {
+            enableSDKFilter.isOn = isApplyAudioFilter
+        }
+    }
+    
     init(signalClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalClient = signalClient
         self.webRTCClient = webRTCClient
@@ -104,18 +111,17 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.mainTitle.text = "Krisp SDK via WebRTC"
-        self.webRTCStatusLabel.text = "Not connected"
+        self.webRTCStatusLabel.text = "New"
         
         self.isSignalingConnected = false
 
         self.hasLocalSdp = false
         self.localCandidateCount = 0
-
-        self.hasRemoteSdp = false
         self.remoteCandidateCount = 0
         
         self.isSpeakerEnabled = true
         self.isMicrophoneEnabled = true
+        self.isApplyAudioFilter = true
         
         self.signalClient.delegate = self
         self.signalClient.connect()
@@ -155,6 +161,11 @@ final class ViewController: UIViewController {
             self.webRTCClient.muteMicrophone()
         }
     }
+    
+    @IBAction func krispSDKTapHandler(_ sender: UISwitch) {
+        self.isApplyAudioFilter = sender.isOn
+        self.webRTCClient.enableAudioFilter(enable: self.isApplyAudioFilter)
+    }
 }
 
 extension ViewController: SignalClientDelegate {
@@ -187,9 +198,7 @@ extension ViewController: WebRTCClientDelegate {
     }
     
     func webRTCClient(_ client: WebRTCClient, didChangeConnectionState state: RTCIceConnectionState) {
-        
         let textColor: UIColor
-        
         switch state {
         case .connected, .completed:
             textColor = UIColor.systemGreen
@@ -200,7 +209,6 @@ extension ViewController: WebRTCClientDelegate {
         @unknown default:
             textColor = .black
         }
-        
         DispatchQueue.main.async {
             self.webRTCStatusLabel?.text = state.description.capitalized
             self.webRTCStatusLabel?.textColor = textColor

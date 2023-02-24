@@ -9,9 +9,6 @@
 #import "KrispProcessingModule.h"
 #include <vector>
 
-constexpr size_t kNsFrameSize = 160;
-static bool krisp_ready_ = false;
-
 static KrispAudioFrameDuration GetFrameDuration(size_t duration)
 {
     switch (duration) {
@@ -60,20 +57,21 @@ static KrispAudioSamplingRate GetSampleRate(size_t rate)
     }
 }
 
+bool KrispProcessingModule::m_isEnableNC = true;
+
 KrispProcessingModule::KrispProcessingModule(const char* __nullable weight, unsigned int blobSize)
     : m_session(nullptr),
-      m_ProcessorName(weight),
-      m_SampleRatehz(48000),
-      m_Numchannels(1),
-      m_IsAppleNC(true)
+      m_processorName(weight),
+      m_sampleRateHz(48000),
+      m_numChannels(1)
 {
+   
 }
 
 KrispProcessingModule::~KrispProcessingModule()
 {
     krispAudioNcCloseSession(m_session);
     krispAudioGlobalDestroy();
-    krisp_ready_ = false;
 }
 
 void KrispProcessingModule::init( )
@@ -83,27 +81,26 @@ void KrispProcessingModule::init( )
         return;
     }
 
-    if (krispAudioSetModel(convertMBString2WString(m_ProcessorName.c_str()).c_str(), "default") != 0) {
-        NSLog(@"KrispProcessingModule: Krisp failed to set wt file, weight = %s", m_ProcessorName.c_str());
+    if (krispAudioSetModel(convertMBString2WString(m_processorName.c_str()).c_str(), "default") != 0) {
+        NSLog(@"KrispProcessingModule: Krisp failed to set wt file, weight = %s", m_processorName.c_str());
         return;
     }
-    krisp_ready_ = true;
 }
 
 void KrispProcessingModule::reset( ) {
     krispAudioNcCloseSession(m_session);
 }
 
-void KrispProcessingModule::Reset(int new_rate)
+void KrispProcessingModule::resetSampleRate(int newRate)
 {
     krispAudioNcCloseSession(m_session);
-    createSession(new_rate);
-    m_SampleRatehz = new_rate;
+    createSession(newRate);
+    m_sampleRateHz = newRate;
 }
 
-void KrispProcessingModule::EnableNC(const bool isEnable)
+void KrispProcessingModule::enableNC(const bool isEnable)
 {
-    m_IsAppleNC = isEnable;
+    m_isEnableNC = isEnable;
 }
 
 void KrispProcessingModule::createSession(int rate) {
@@ -116,21 +113,20 @@ void KrispProcessingModule::createSession(int rate) {
 void KrispProcessingModule::destroy() {
     krispAudioNcCloseSession(m_session);
     krispAudioGlobalDestroy();
-    krisp_ready_ = false;
 }
 
-void KrispProcessingModule::initSession(int sample_rate_hz, int num_channels)
+void KrispProcessingModule::initSession(const int sampleRateHz, const int numChannels)
 {
     if (m_session == nullptr) {
-        createSession(sample_rate_hz);
-        m_SampleRatehz = sample_rate_hz;
+        createSession(sampleRateHz);
+        m_sampleRateHz = sampleRateHz;
     } else {
-        if (sample_rate_hz != m_SampleRatehz) {
-            m_SampleRatehz = sample_rate_hz;
-            Reset(m_SampleRatehz);
+        if (sampleRateHz != m_sampleRateHz) {
+            m_sampleRateHz = sampleRateHz;
+            resetSampleRate(m_sampleRateHz);
         }
     }
-    m_Numchannels = num_channels;
+    m_numChannels = numChannels;
 }
 
 void KrispProcessingModule::setName(const std::string& name) {
@@ -138,11 +134,11 @@ void KrispProcessingModule::setName(const std::string& name) {
 }
 
 void KrispProcessingModule::frameProcess(const size_t channelNumber, const size_t num_bands, const size_t bufferSize, float * _Nonnull  buffer) {
-
-    if (!m_IsAppleNC) {
+    
+    if (!m_isEnableNC) {
         return;
     }
-    
+
     if (m_session == nullptr) {
       NSLog(@"KrispProcessingModule: Session creation failed ");
       return;
@@ -151,8 +147,8 @@ void KrispProcessingModule::frameProcess(const size_t channelNumber, const size_
     int num_frames = (int)bufferSize;
     int rate = num_frames*100;
 
-    if(rate != m_SampleRatehz) {
-        Reset(rate);
+    if(rate != m_sampleRateHz) {
+        resetSampleRate(rate);
     }
 
     std::vector<float> bufferIn;
