@@ -16,7 +16,7 @@ final class WebRTCClient: NSObject {
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
         let videoDecoderFactory = RTCDefaultVideoDecoderFactory()
 
-        let weightFileName = Bundle.main.path(forResource: "c6.f.s.ced125", ofType: "kw")
+        let weightFileName = Bundle.main.path(forResource: Configuration.NCModels.smallFullBandModel, ofType: "kw")
         let audioProcessor = KrispAudioProcessor(params: weightFileName!, size: 10) as! RTCAudioProcessorDelegate
         return RTCPeerConnectionFactory.setup(videoEncoderFactory, decoderFactory: videoDecoderFactory, audioProcessorDelegate: audioProcessor)
     }()
