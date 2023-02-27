@@ -1,4 +1,4 @@
-# Introduction
+# TODO:
 
-This document will contain reference on how to integrate Krisp with WebRTC.
-Stay tuned.
+Add external link to the instruction when it is ready.
+
