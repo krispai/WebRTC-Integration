@@ -1,0 +1,14 @@
+{
+  "name": "webrtc-server",
+  "version": "1.0.0",
+  "description": "WebRTC server for direct connections between peers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "ws": "7.4.6"
+  }
+}
