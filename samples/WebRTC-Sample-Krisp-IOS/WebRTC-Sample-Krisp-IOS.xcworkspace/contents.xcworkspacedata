@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:/Users/ahayrapetyan/Documents/Projects/NewBranch/WebRTC-Integration/samples/WebRTC-Sample-Krisp-IOS/WebRTC-Sample-Krisp-IOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:WebRTC-Sample-Krisp-IOS.xcodeproj">
+   </FileRef>
+</Workspace>
