@@ -32,7 +32,7 @@ extension WebRTCClient {
             
             self.rtcAudioSession.lockForConfiguration()
             do {
-                try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
+                try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord)
                 try self.rtcAudioSession.overrideOutputAudioPort(.speaker)
                 try self.rtcAudioSession.setActive(true)
             } catch let error {
@@ -49,7 +49,7 @@ extension WebRTCClient {
             }
             self.rtcAudioSession.lockForConfiguration()
             do {
-                try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord.rawValue)
+                try self.rtcAudioSession.setCategory(AVAudioSession.Category.playAndRecord)
                 try self.rtcAudioSession.overrideOutputAudioPort(.none)
             } catch let error {
                 debugPrint("WebRTCClient: Failed to turn on speaker, error: \(error)")

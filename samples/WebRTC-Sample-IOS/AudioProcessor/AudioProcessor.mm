@@ -46,7 +46,7 @@ RTCProcessingController* _processingController;
 
 - (void)initializeSession:(size_t)sampleRate numChannels:(size_t)numChannels
 {
-    _processingModule->initSession(sampleRate, (int)numChannels);
+    _processingModule->initSession((int)sampleRate, (int)numChannels);
 }
 
 - (void)name {

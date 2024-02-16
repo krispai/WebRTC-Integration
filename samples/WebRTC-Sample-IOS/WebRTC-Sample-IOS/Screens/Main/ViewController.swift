@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  WebRTC-Sample-iOS
-//
-//  Created by Arthur Hayrapetyan on 19.01.23.
-//
-
 import UIKit
 import AVFoundation
 import WebRTC
@@ -26,9 +19,10 @@ final class ViewController: UIViewController {
     @IBOutlet weak var microphoneEnable: UISwitch!
     @IBOutlet weak var enableAudioFilter: UISwitch!
 
-    private let signalClient: SignalingClient
+    private let serverConfig: Configuration.ServerConfig
     private let webRTCClient: WebRTCClient
-    
+    private var signalClient: SignalingClient?
+
     private var isSignalingConnected: Bool = false {
         didSet {
             DispatchQueue.main.async {
@@ -93,19 +87,80 @@ final class ViewController: UIViewController {
             enableAudioFilter.isOn = isApplyAudioFilter
         }
     }
-    
-    init(signalClient: SignalingClient, webRTCClient: WebRTCClient) {
-        self.signalClient = signalClient
-        self.webRTCClient = webRTCClient
-        super.init(nibName: String(describing: ViewController.self), bundle: Bundle.main)
-    }
 
-    @available(*, unavailable, renamed: "init(product:coder:)")
-       required init?(coder: NSCoder) {
-           let config = Configuration.serverConfig
-           self.webRTCClient = WebRTCClient(iceServers: config.webRTCIceServers)
-           self.signalClient = SignalingClient(webSocket: WebSocketClient(url: config.signalingServerUrl))
+    required init?(coder: NSCoder) {
+           self.serverConfig = Configuration.serverConfig
+           self.webRTCClient = WebRTCClient(iceServers: self.serverConfig.webRTCIceServers)
            super.init(coder: coder)
+    }
+    
+    func setupSignalClient(serverUrl: URL) {
+        // Use the entered IP address if needed to configure the signaling client
+        let webSocketClient = WebSocketClient(url: serverUrl)
+        self.signalClient = SignalingClient(webSocket: webSocketClient)
+
+        self.signalClient?.delegate = self
+        self.signalClient?.connect()
+
+    }
+    
+    func loadIpAddressAndPort() -> (ipAddress: String?, port: String?) {
+        let ipAddress = UserDefaults.standard.string(forKey: "ipAddress") ?? "192.168.1.1"
+        let port = UserDefaults.standard.string(forKey: "port") ?? "8080"
+        return (ipAddress, port)
+    }
+    
+    func saveIpAddressAndPort(ipAddress: String, port: String) {
+        UserDefaults.standard.set(ipAddress, forKey: "ipAddress")
+        UserDefaults.standard.set(port, forKey: "port")
+    }
+    
+    func popUpIpAddressInput() {
+        let alertController = UIAlertController(title: "Enter IP Address",
+            message: "Please enter the IP address to connect to",
+            preferredStyle: .alert)
+ 
+        let (ipAddress, port) = loadIpAddressAndPort()
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "IP Address"
+            textField.text = ipAddress
+            textField.keyboardType = .decimalPad
+        }
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "Port"
+            textField.text = port
+            textField.keyboardType = .numberPad
+        }
+        
+        let connectAction = UIAlertAction(title: "Connect", style: .default) { [weak self, weak alertController] _ in
+            guard let textFields = alertController?.textFields, textFields.count == 2,
+                  let ipAddress = textFields[0].text, !ipAddress.isEmpty,
+                  let port = textFields[1].text, !port.isEmpty,
+                  Int(port) != nil else {
+                return
+            }
+            let ipAddressAndPort: String = "ws://\(ipAddress):\(port)"
+            guard let serverUrl: URL = URL(string: ipAddressAndPort) else {
+                debugPrint("Invalid URL " + ipAddressAndPort)
+                return
+            }
+            self!.saveIpAddressAndPort(ipAddress: ipAddress, port: port)
+            self!.setupSignalClient(serverUrl: serverUrl)
+        }
+
+        alertController.addAction(connectAction)
+        present(alertController, animated: true)
+        return
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.popUpIpAddressInput()
+
+        self.webRTCClient.delegate = self
     }
 
     override func viewDidLoad() {
@@ -122,23 +177,20 @@ final class ViewController: UIViewController {
         self.isSpeakerEnabled = true
         self.isMicrophoneEnabled = true
         self.isApplyAudioFilter = true
-        
-        self.signalClient.delegate = self
-        self.signalClient.connect()
-        self.webRTCClient.delegate = self
+
     }
     
     @IBAction func sendOfferButtonHandler(_ sender: Any) {
         self.webRTCClient.sendOfferMessage { (sdp) in
             self.hasLocalSdp = true
-            self.signalClient.send(sdp: sdp)
+            self.signalClient?.send(sdp: sdp)
         }
     }
     
     @IBAction func sendAnswerButtonHandler(_ sender: Any) {
         self.webRTCClient.sendAnswerMessage { (localSdp) in
             self.hasLocalSdp = true
-            self.signalClient.send(sdp: localSdp)
+            self.signalClient?.send(sdp: localSdp)
         }
     }
     
@@ -194,7 +246,7 @@ extension ViewController: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
         self.localCandidateCount += 1
-        self.signalClient.send(candidate: candidate)
+        self.signalClient?.send(candidate: candidate)
     }
     
     func webRTCClient(_ client: WebRTCClient, didChangeConnectionState state: RTCIceConnectionState) {

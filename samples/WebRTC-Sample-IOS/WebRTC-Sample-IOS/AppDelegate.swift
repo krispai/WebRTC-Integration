@@ -15,7 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = self.buildMainViewController()
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let mainViewController = storyboard.instantiateViewController(withIdentifier: "MyViewController") as? ViewController {
+            let navViewController = UINavigationController(rootViewController: mainViewController)
+            navViewController.navigationBar.prefersLargeTitles = true
+            window.rootViewController = navViewController
+        }
+        else {
+            return false
+        }
+        
         window.makeKeyAndVisible()
         self.window = window
         return true
@@ -35,22 +45,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-    private func buildMainViewController() -> UIViewController {
-        
-        let webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
-        let signalClient = self.buildSignalingClient()
-        let mainViewController = ViewController(signalClient: signalClient, webRTCClient: webRTCClient)
-        let navViewController = UINavigationController(rootViewController: mainViewController)
-        navViewController.navigationBar.prefersLargeTitles = true
-        return navViewController
-    }
-    
-    private func buildSignalingClient() -> SignalingClient {
-        
-        let webSocketProvider: WebSocketProvider
-        webSocketProvider = WebSocketClient(url: self.config.signalingServerUrl)
-        
-        return SignalingClient(webSocket: webSocketProvider)
-    }
 }
 
