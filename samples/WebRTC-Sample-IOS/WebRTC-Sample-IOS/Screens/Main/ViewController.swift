@@ -6,20 +6,17 @@ final class ViewController: UIViewController {
 
     @IBOutlet weak var mainTitle: UILabel!
     @IBOutlet weak var signalingStatus: UILabel!
-
     @IBOutlet weak var localSDPImageView: UIImageView!
     @IBOutlet weak var localCandidatesCountLabel: UILabel!
-
     @IBOutlet weak var remoteSDPImageView: UIImageView!
     @IBOutlet weak var remoteCandidatesCountLabel: UILabel!
-
     @IBOutlet weak var webRTCStatusLabel: UILabel!
-    
     @IBOutlet weak var speakerEnable: UISwitch!
     @IBOutlet weak var microphoneEnable: UISwitch!
     @IBOutlet weak var enableAudioFilter: UISwitch!
+    
+    
 
-    private let serverConfig: Configuration.ServerConfig
     private let webRTCClient: WebRTCClient
     private var signalClient: SignalingClient?
 
@@ -89,16 +86,21 @@ final class ViewController: UIViewController {
     }
 
     required init?(coder: NSCoder) {
-           self.serverConfig = Configuration.serverConfig
-           self.webRTCClient = WebRTCClient(iceServers: self.serverConfig.webRTCIceServers)
-           super.init(coder: coder)
+        let defaultWebRtcIceServers = [
+            "stun:stun.l.google.com:19302",
+            "stun:stun1.l.google.com:19302",
+            "stun:stun2.l.google.com:19302",
+            "stun:stun3.l.google.com:19302",
+            "stun:stun4.l.google.com:19302"
+        ]
+        self.webRTCClient = WebRTCClient(iceServers: defaultWebRtcIceServers)
+        super.init(coder: coder)
     }
     
     func setupSignalClient(serverUrl: URL) {
         // Use the entered IP address if needed to configure the signaling client
         let webSocketClient = WebSocketClient(url: serverUrl)
         self.signalClient = SignalingClient(webSocket: webSocketClient)
-
         self.signalClient?.delegate = self
         self.signalClient?.connect()
 

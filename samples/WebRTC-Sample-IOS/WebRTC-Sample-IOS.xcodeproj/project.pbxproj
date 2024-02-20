@@ -10,7 +10,6 @@
 		44DA3844F234A38AADEEE590 /* Pods_WebRTC_Sample_IOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADD7546BB7A0DD35F477178A /* Pods_WebRTC_Sample_IOS.framework */; };
 		5D34894BCF798262840C574A /* Pods_WebRTC_Sample_IOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB9EFF1FBEF95964F14B34DE /* Pods_WebRTC_Sample_IOSTests.framework */; };
 		8835AC6529A3BC4400184202 /* libAudioProcessor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885058C929A3B734003F9308 /* libAudioProcessor.a */; };
-		883E5170299A0E9F0062E2FE /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E516F299A0E9F0062E2FE /* Configuration.swift */; };
 		883E5173299A14CA0062E2FE /* SignalingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E5172299A14CA0062E2FE /* SignalingClient.swift */; };
 		883E5175299A152C0062E2FE /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E5174299A152C0062E2FE /* Message.swift */; };
 		883E5178299A177D0062E2FE /* RTCStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883E5177299A177D0062E2FE /* RTCStates.swift */; };
@@ -24,7 +23,7 @@
 		885058C229A3B47D003F9308 /* WebRTCClient+DataChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058C129A3B47D003F9308 /* WebRTCClient+DataChannel.swift */; };
 		885058C429A3B55F003F9308 /* WebSocketClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058C329A3B55F003F9308 /* WebSocketClientProtocol.swift */; };
 		885058D329A3B7D3003F9308 /* SignalingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885058D229A3B7D3003F9308 /* SignalingClientProtocol.swift */; };
-		885058DB29A3B839003F9308 /* ProcessingModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 885058D729A3B839003F9308 /* ProcessingModule.mm */; };
+		885058DB29A3B839003F9308 /* SampleAudioFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 885058D729A3B839003F9308 /* SampleAudioFilter.mm */; };
 		8897D32629AF8FC400098486 /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8897D32429AF8FC400098486 /* AudioProcessor.mm */; };
 		88A58BD229A78BDD00E8C691 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4029A78903002D61B6 /* WebRTC.xcframework */; };
 		88A58BD529A78D2800E8C691 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88404B4029A78903002D61B6 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,7 +87,6 @@
 		864D90697AD968DFECFC1D54 /* Pods-WebRTC-Sample-IOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTC-Sample-IOS.debug.xcconfig"; path = "Target Support Files/Pods-WebRTC-Sample-IOS/Pods-WebRTC-Sample-IOS.debug.xcconfig"; sourceTree = "<group>"; };
 		8835AC6929A3BE8F00184202 /* WebRTC-Sample-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebRTC-Sample-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		8835AC6A29A3C07000184202 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		883E516F299A0E9F0062E2FE /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		883E5172299A14CA0062E2FE /* SignalingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClient.swift; sourceTree = "<group>"; };
 		883E5174299A152C0062E2FE /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		883E5177299A177D0062E2FE /* RTCStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTCStates.swift; sourceTree = "<group>"; };
@@ -103,8 +101,8 @@
 		885058C329A3B55F003F9308 /* WebSocketClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClientProtocol.swift; sourceTree = "<group>"; };
 		885058C929A3B734003F9308 /* libAudioProcessor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAudioProcessor.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		885058D229A3B7D3003F9308 /* SignalingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClientProtocol.swift; sourceTree = "<group>"; };
-		885058D629A3B839003F9308 /* ProcessingModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessingModule.h; sourceTree = "<group>"; };
-		885058D729A3B839003F9308 /* ProcessingModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProcessingModule.mm; sourceTree = "<group>"; };
+		885058D629A3B839003F9308 /* SampleAudioFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleAudioFilter.h; sourceTree = "<group>"; };
+		885058D729A3B839003F9308 /* SampleAudioFilter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SampleAudioFilter.mm; sourceTree = "<group>"; };
 		8897D32429AF8FC400098486 /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
 		8897D32529AF8FC400098486 /* AudioProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioProcessor.h; sourceTree = "<group>"; };
 		88BBB58E29795E30003DD32B /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
@@ -233,8 +231,8 @@
 			children = (
 				8897D32529AF8FC400098486 /* AudioProcessor.h */,
 				8897D32429AF8FC400098486 /* AudioProcessor.mm */,
-				885058D629A3B839003F9308 /* ProcessingModule.h */,
-				885058D729A3B839003F9308 /* ProcessingModule.mm */,
+				885058D629A3B839003F9308 /* SampleAudioFilter.h */,
+				885058D729A3B839003F9308 /* SampleAudioFilter.mm */,
 			);
 			path = AudioProcessor;
 			sourceTree = "<group>";
@@ -324,7 +322,6 @@
 				88D4CE9F297913EA00ED8F17 /* Assets.xcassets */,
 				88D4CEA1297913EA00ED8F17 /* LaunchScreen.storyboard */,
 				88D4CEA4297913EA00ED8F17 /* Info.plist */,
-				883E516F299A0E9F0062E2FE /* Configuration.swift */,
 			);
 			path = "WebRTC-Sample-IOS";
 			sourceTree = "<group>";
@@ -607,7 +604,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				885058DB29A3B839003F9308 /* ProcessingModule.mm in Sources */,
+				885058DB29A3B839003F9308 /* SampleAudioFilter.mm in Sources */,
 				8897D32629AF8FC400098486 /* AudioProcessor.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,7 +617,6 @@
 				88D4CE9B297913E800ED8F17 /* ViewController.swift in Sources */,
 				883E517A299A17BA0062E2FE /* SessionDescription.swift in Sources */,
 				885058C029A3B2D1003F9308 /* WebRTCClient+AudioControl.swift in Sources */,
-				883E5170299A0E9F0062E2FE /* Configuration.swift in Sources */,
 				883E5175299A152C0062E2FE /* Message.swift in Sources */,
 				883E5173299A14CA0062E2FE /* SignalingClient.swift in Sources */,
 				885058C429A3B55F003F9308 /* WebSocketClientProtocol.swift in Sources */,
