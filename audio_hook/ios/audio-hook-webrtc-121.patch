@@ -1,0 +1,444 @@
+diff --git a/sdk/BUILD.gn b/sdk/BUILD.gn
+index e28bdcc5a2..6bebfffd53 100644
+--- a/sdk/BUILD.gn
++++ b/sdk/BUILD.gn
+@@ -519,6 +519,8 @@ if (is_ios || is_mac) {
+       sources = [
+         "objc/native/api/objc_audio_device_module.h",
+         "objc/native/api/objc_audio_device_module.mm",
++        "objc/native/api/audio_processing_module.h",
++        "objc/native/api/audio_processing_module.mm",
+       ]
+ 
+       deps = [
+@@ -924,6 +926,10 @@ if (is_ios || is_mac) {
+       ]
+       configs += [ "..:no_global_constructors" ]
+       sources = [
++        "objc/components/audio/RTCProcessingController.h",
++        "objc/components/audio/RTCProcessingController.mm",
++        "objc/components/audio/RTCAudioProcessing.h",
++        "objc/components/audio/RTCAudioProcessing.mm",
+         "objc/api/peerconnection/RTCAudioSource+Private.h",
+         "objc/api/peerconnection/RTCAudioSource.h",
+         "objc/api/peerconnection/RTCAudioSource.mm",
+@@ -1031,7 +1037,7 @@ if (is_ios || is_mac) {
+ 
+       configs += [
+         "..:common_objc",
+-        ":used_from_extension",
++        ":used_from_extension","../modules/audio_processing:apm_debug_dump",
+       ]
+       public_configs = [ ":common_config_objc" ]
+ 
+@@ -1248,6 +1254,7 @@ if (is_ios || is_mac) {
+         output_name = "WebRTC"
+ 
+         common_objc_headers = [
++          "objc/components/audio/RTCProcessingController.h",
+           "objc/base/RTCCodecSpecificInfo.h",
+           "objc/base/RTCEncodedImage.h",
+           "objc/base/RTCI420Buffer.h",
+@@ -1289,6 +1296,7 @@ if (is_ios || is_mac) {
+           "objc/helpers/RTCCameraPreviewView.h",
+           "objc/helpers/RTCDispatcher.h",
+           "objc/helpers/UIDevice+RTCDevice.h",
++          "objc/components/audio/RTCAudioProcessing.h",
+           "objc/api/peerconnection/RTCAudioSource.h",
+           "objc/api/peerconnection/RTCAudioTrack.h",
+           "objc/api/peerconnection/RTCConfiguration.h",
+diff --git a/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.h b/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.h
+index 5575af98c9..7c2a1a2069 100644
+--- a/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.h
++++ b/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.h
+@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
+ @class RTC_OBJC_TYPE(RTCVideoSource);
+ @class RTC_OBJC_TYPE(RTCVideoTrack);
+ @class RTC_OBJC_TYPE(RTCPeerConnectionFactoryOptions);
++@class RTC_OBJC_TYPE(RTCAudioProcessing);
+ @protocol RTC_OBJC_TYPE
+ (RTCPeerConnectionDelegate);
+ @protocol RTC_OBJC_TYPE
+@@ -33,10 +34,18 @@ NS_ASSUME_NONNULL_BEGIN
+ (RTCSSLCertificateVerifier);
+ @protocol RTC_OBJC_TYPE
+ (RTCAudioDevice);
++@protocol RTC_OBJC_TYPE
++(RTCAudioProcessing);
++@protocol RTC_OBJC_TYPE
++(RTCAudioProcessorDelegate);
+ 
+ RTC_OBJC_EXPORT
+ @interface RTC_OBJC_TYPE (RTCPeerConnectionFactory) : NSObject
+ 
+++ (RTCPeerConnectionFactory *)setup:(nullable id<RTC_OBJC_TYPE(RTCVideoEncoderFactory)>)encoderFactory
++                              decoderFactory:(nullable id<RTC_OBJC_TYPE(RTCVideoDecoderFactory)>)decoderFactory
++                              audioProcessorDelegate:(id<RTC_OBJC_TYPE(RTCAudioProcessorDelegate)>)audioProcessorDelegate;
++
+ /* Initialize object with default H264 video encoder/decoder factories and default ADM */
+ - (instancetype)init;
+ 
+diff --git a/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.mm b/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.mm
+index 15f9eb9ee4..9c8a2a7da0 100644
+--- a/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.mm
++++ b/sdk/objc/api/peerconnection/RTCPeerConnectionFactory.mm
+@@ -41,7 +41,6 @@
+ #include "modules/audio_device/include/audio_device.h"
+ #include "modules/audio_processing/include/audio_processing.h"
+ 
+-#include "sdk/objc/native/api/objc_audio_device_module.h"
+ #include "sdk/objc/native/api/video_decoder_factory.h"
+ #include "sdk/objc/native/api/video_encoder_factory.h"
+ #include "sdk/objc/native/src/objc_video_decoder_factory.h"
+@@ -49,8 +48,20 @@
+ 
+ #if defined(WEBRTC_IOS)
+ #import "sdk/objc/native/api/audio_device_module.h"
++#include "sdk/objc/native/api/audio_processing_module.h"
+ #endif
+ 
++#import "RTCPeerConnectionFactoryBuilder.h"
++
++#include "api/audio_codecs/audio_decoder_factory.h"
++#include "api/audio_codecs/audio_encoder_factory.h"
++#include "api/video_codecs/video_decoder_factory.h"
++#include "api/video_codecs/video_encoder_factory.h"
++#include "modules/audio_device/include/audio_device.h"
++#include "modules/audio_processing/include/audio_processing.h"
++#include "components/audio/RTCAudioProcessing.h"
++#include "components/audio/RTCProcessingController.h"
++
+ @implementation RTC_OBJC_TYPE (RTCPeerConnectionFactory) {
+   std::unique_ptr<rtc::Thread> _networkThread;
+   std::unique_ptr<rtc::Thread> _workerThread;
+@@ -68,6 +79,54 @@ @implementation RTC_OBJC_TYPE (RTCPeerConnectionFactory) {
+ #endif
+ }
+ 
+++ (rtc::scoped_refptr<webrtc::AudioDeviceModule>)getAudioDeviceModule {
++#if defined(WEBRTC_IOS)
++  return webrtc::CreateAudioDeviceModule();
++#else
++  return nullptr;
++#endif
++}
++
+++ (RTCPeerConnectionFactory *)setup:(nullable id<RTC_OBJC_TYPE(RTCVideoEncoderFactory)>)encoderFactory
++                              decoderFactory:(nullable id<RTC_OBJC_TYPE(RTCVideoDecoderFactory)>)decoderFactory
++                              audioProcessorDelegate:(id<RTC_OBJC_TYPE(RTCAudioProcessorDelegate)>)audioProcessorDelegate {
++
++  std::unique_ptr<webrtc::VideoEncoderFactory> native_encoder_factory;
++  std::unique_ptr<webrtc::VideoDecoderFactory> native_decoder_factory;
++  rtc::scoped_refptr<webrtc::AudioProcessing> native_audio_processing;
++
++  rtc::scoped_refptr<webrtc::AudioEncoderFactory> audio_encoder_factory;
++  rtc::scoped_refptr<webrtc::AudioDecoderFactory> audio_decoder_factory;
++
++  if (encoderFactory) {
++    native_encoder_factory = webrtc::ObjCToNativeVideoEncoderFactory(encoderFactory);
++  }
++  if (decoderFactory) {
++    native_decoder_factory = webrtc::ObjCToNativeVideoDecoderFactory(decoderFactory);
++  }
++
++  RTCAudioProcessing*  audioProcessingModule = [audioProcessorDelegate getProcessingModule];
++  if (audioProcessingModule) {
++    native_audio_processing = webrtc::ObjCToNativeAudioProcessingModule(audioProcessingModule);
++  }
++
++  rtc::scoped_refptr<webrtc::AudioDeviceModule> audio_device_module;
++  audio_device_module = [RTCPeerConnectionFactory getAudioDeviceModule];
++
++  audio_encoder_factory = webrtc::CreateBuiltinAudioEncoderFactory();
++  audio_decoder_factory = webrtc::CreateBuiltinAudioDecoderFactory();
++
++  RTCPeerConnectionFactoryBuilder* factoryBuilder = [RTCPeerConnectionFactoryBuilder builder];
++  [factoryBuilder setVideoEncoderFactory: std::move(native_encoder_factory)];
++  [factoryBuilder setVideoDecoderFactory: std::move(native_decoder_factory)];
++  [factoryBuilder setAudioEncoderFactory: std::move(audio_encoder_factory)];
++  [factoryBuilder setAudioDecoderFactory: std::move(audio_decoder_factory)];
++  [factoryBuilder setAudioDeviceModule: audio_device_module];
++  [factoryBuilder setAudioProcessingModule: std::move(native_audio_processing)];
++
++  return [factoryBuilder createPeerConnectionFactory];
++}
++
+ - (instancetype)init {
+   return [self
+       initWithNativeAudioEncoderFactory:webrtc::CreateBuiltinAudioEncoderFactory()
+diff --git a/sdk/objc/components/audio/RTCAudioProcessing+Native.h b/sdk/objc/components/audio/RTCAudioProcessing+Native.h
+new file mode 100644
+index 0000000000..62dc20c27b
+--- /dev/null
++++ b/sdk/objc/components/audio/RTCAudioProcessing+Native.h
+@@ -0,0 +1,63 @@
++ //
++ //  RTCAudioProcessing+native.h
++ //
++ //  Created by Arthur Hayrapetyan on 26.01.23.
++ //  Copyright © 2023 Krisp Technologies. All rights reserved.
++ //
++#import <Foundation/Foundation.h>
++#import "RTCMacros.h"
++
++#include "modules/audio_processing/include/audio_processing.h"
++#include "modules/audio_processing/audio_processing_impl.h"
++#include "modules/audio_processing/audio_buffer.h"
++
++typedef std::function<void()> ProcInitCallback;
++typedef std::function<void(const int sampleRateHz, const int numChannels)> ProcSessionInitializeCallback;
++typedef std::function<void()> ProcDestroyCallback;
++typedef std::function<void()> ProcResetCallback;
++typedef std::function<void(const size_t numChannel, const size_t numBands, const size_t bufferSize, float* _Nonnull buffer)> AudioFrameProcessCallback;
++
++class CustomProcessingImpl : public webrtc::CustomProcessing {
++
++  ProcInitCallback  initCB_;
++  ProcSessionInitializeCallback  sessionInitCB_;
++  ProcDestroyCallback destroyCB_;
++  ProcResetCallback resetCB_;
++  AudioFrameProcessCallback audioFrameProcessCB_;
++
++  public:
++
++    CustomProcessingImpl(ProcInitCallback initCB, ProcSessionInitializeCallback sessionInitCB,
++                         ProcDestroyCallback  destroyCB, ProcResetCallback resetCB, AudioFrameProcessCallback audioFrameProcessCB)
++        : initCB_(initCB), sessionInitCB_(sessionInitCB), destroyCB_(destroyCB), resetCB_(resetCB), audioFrameProcessCB_(audioFrameProcessCB)
++  	{
++        initCB_();
++  	}
++
++    ~CustomProcessingImpl()
++    {
++        destroyCB_();
++    }
++
++    void Reset()
++    {
++        resetCB_();
++    }
++
++    void Initialize(int sample_rate_hz, int num_channels) override
++    {
++        sessionInitCB_(sample_rate_hz, num_channels);
++    }
++
++    void Process(webrtc::AudioBuffer* __nullable audio) override {
++        audioFrameProcessCB_(audio->num_channels(), audio->num_bands(), audio->num_frames(), audio->channels()[0]);
++    }
++
++    std::string ToString() const override {
++  	  return "CustomProcessingImpl";
++    }
++
++    void SetRuntimeSetting(webrtc::AudioProcessing::RuntimeSetting setting) override {
++
++    }
++};
+diff --git a/sdk/objc/components/audio/RTCAudioProcessing.h b/sdk/objc/components/audio/RTCAudioProcessing.h
+new file mode 100644
+index 0000000000..2f0b3e051d
+--- /dev/null
++++ b/sdk/objc/components/audio/RTCAudioProcessing.h
+@@ -0,0 +1,23 @@
++//
++//  RTCAudioProcessing.h
++//
++//  Created by Arthur Hayrapetyan on 26.01.23.
++//  Copyright © 2023 Krisp Technologies. All rights reserved.
++//
++
++#import <Foundation/Foundation.h>
++
++#import "RTCMacros.h"
++
++NS_ASSUME_NONNULL_BEGIN
++
++RTC_OBJC_EXPORT
++@interface RTC_OBJC_TYPE (RTCAudioProcessing) : NSObject
++
++- (instancetype)initWithModule:(unsigned long)processor;
++
++@property(nonatomic, assign) unsigned long audioProcessing;
++
++@end
++
++NS_ASSUME_NONNULL_END
+diff --git a/sdk/objc/components/audio/RTCAudioProcessing.mm b/sdk/objc/components/audio/RTCAudioProcessing.mm
+new file mode 100644
+index 0000000000..b6423cf5e0
+--- /dev/null
++++ b/sdk/objc/components/audio/RTCAudioProcessing.mm
+@@ -0,0 +1,22 @@
++//
++//  RTCAudioProcessing.mm
++//
++//  Created by Arthur Hayrapetyan on 26.01.23.
++//  Copyright © 2023 Krisp Technologies. All rights reserved.
++//
++
++#include "RTCAudioProcessing.h"
++
++@implementation RTC_OBJC_TYPE (RTCAudioProcessing) {
++
++}
++
++@synthesize audioProcessing = _audioProcessing;
++
++- (instancetype)initWithModule:(unsigned long)processor {
++  _audioProcessing = processor;
++
++  return self;
++}
++
++@end
+diff --git a/sdk/objc/components/audio/RTCProcessingController.h b/sdk/objc/components/audio/RTCProcessingController.h
+new file mode 100644
+index 0000000000..7d8385f106
+--- /dev/null
++++ b/sdk/objc/components/audio/RTCProcessingController.h
+@@ -0,0 +1,34 @@
++//
++//  RTCProcessingController.h
++//
++//  Created by Arthur Hayrapetyan on 26.01.23.
++//  Copyright © 2023 Krisp Technologies. All rights reserved.
++//
++
++#import <Foundation/Foundation.h>
++#import "RTCMacros.h"
++
++NS_ASSUME_NONNULL_BEGIN
++
++@class RTC_OBJC_TYPE(RTCAudioProcessing);
++
++RTC_OBJC_EXPORT
++@protocol RTCAudioProcessorDelegate <NSObject>
++- (void)initializeProcessor;
++- (void)initializeSession:(size_t)sampleRateHz numChannels:(size_t)numChannels;
++- (void)name;
++- (void)frameProcess:(size_t)channelNumber numBands:(size_t)numBands bufferSize:(size_t)bufferSize buffer:(float * _Nonnull)buffer;
++- (void)destroyed;
++- (void)reset;
++- (RTCAudioProcessing*)getProcessingModule;
++@end
++
++RTC_OBJC_EXPORT
++@interface RTC_OBJC_TYPE (RTCProcessingController) : NSObject
++
++- (instancetype)initWithDelegate:(id<RTCAudioProcessorDelegate>)processorDelegate;
++- (RTCAudioProcessing*) getProcessor;
++
++@end
++
++NS_ASSUME_NONNULL_END
+diff --git a/sdk/objc/components/audio/RTCProcessingController.mm b/sdk/objc/components/audio/RTCProcessingController.mm
+new file mode 100644
+index 0000000000..1ffc33e01a
+--- /dev/null
++++ b/sdk/objc/components/audio/RTCProcessingController.mm
+@@ -0,0 +1,67 @@
++//
++//  RTCProcessingController.mm
++//
++//  Created by Arthur Hayrapetyan on 26.01.23.
++//  Copyright © 2023 Krisp Technologies. All rights reserved.
++//
++
++#include "RTCProcessingController.h"
++#include "RTCAudioProcessing.h"
++
++#import "RTCAudioProcessing+Native.h"
++
++@implementation RTC_OBJC_TYPE (RTCProcessingController) {
++  std::unique_ptr<CustomProcessingImpl> _customProcessing;
++  id<RTCAudioProcessorDelegate> _audioProcessorDelegate;
++
++}
++
++- (instancetype)initWithDelegate:(id<RTCAudioProcessorDelegate>)processorDelegate
++{
++  self = [super init];
++  if (self != nil) {
++      _audioProcessorDelegate = processorDelegate;
++
++      ProcInitCallback initCallback = [self]() {
++          if (_audioProcessorDelegate ) { [_audioProcessorDelegate initializeProcessor]; }
++      };
++
++      ProcSessionInitializeCallback sessionInitializeCallback = [self](const int sampleRateHz, const int numChannels) {
++          if (_audioProcessorDelegate ) { [_audioProcessorDelegate initializeSession: sampleRateHz numChannels: numChannels]; }
++      };
++
++      ProcDestroyCallback destroyCallback = [self]() {
++          if (_audioProcessorDelegate ) { [_audioProcessorDelegate destroyed]; }
++      };
++
++      ProcResetCallback resetCallback = [self]() {
++          if (_audioProcessorDelegate ) { [_audioProcessorDelegate reset]; }
++      };
++
++      AudioFrameProcessCallback frameProcessCallback = [self](const size_t numChannel, const size_t numBands, const size_t bufferSize, float * _Nonnull buffer) {
++          if (_audioProcessorDelegate ) { [_audioProcessorDelegate frameProcess: numChannel numBands:numBands  bufferSize: bufferSize  buffer: buffer]; }
++      };
++
++      _customProcessing = std::make_unique<CustomProcessingImpl>(initCallback, sessionInitializeCallback,
++            destroyCallback, resetCallback, frameProcessCallback);
++  }
++  return self;
++}
++
++- (RTCAudioProcessing*)getProcessor
++{
++    auto audioProcessModule = webrtc::AudioProcessingBuilder()
++         .SetCapturePostProcessing(std::move(_customProcessing))
++         .Create();
++
++    webrtc::AudioProcessing::Config config;
++    config.echo_canceller.enabled = false;
++    config.echo_canceller.mobile_mode = true;
++    audioProcessModule->ApplyConfig(config);
++    auto apm_ptr = audioProcessModule.release();
++
++    RTCAudioProcessing* audioProcessing = [[RTCAudioProcessing alloc ] initWithModule: (unsigned long)apm_ptr];
++    return audioProcessing;
++}
++
++@end
+diff --git a/sdk/objc/native/api/audio_processing_module.h b/sdk/objc/native/api/audio_processing_module.h
+new file mode 100644
+index 0000000000..72daa43c9e
+--- /dev/null
++++ b/sdk/objc/native/api/audio_processing_module.h
+@@ -0,0 +1,11 @@
++#ifndef SDK_OBJC_NATIVE_API_AUDIO_PROCESSING_MODULE_H_
++#define SDK_OBJC_NATIVE_API_AUDIO_PROCESSING_MODULE_H_
++
++#import "components/audio//RTCAudioProcessing.h"
++#include "modules/audio_processing/include/audio_processing.h"
++
++namespace webrtc {
++  rtc::scoped_refptr<AudioProcessing> ObjCToNativeAudioProcessingModule(RTCAudioProcessing* objc_audio_processing_module);
++}  // namespace webrtc
++
++#endif  // SDK_OBJC_NATIVE_API_AUDIO_PROCESSING_MODULE_H_
+diff --git a/sdk/objc/native/api/audio_processing_module.mm b/sdk/objc/native/api/audio_processing_module.mm
+new file mode 100644
+index 0000000000..ec9c9c6155
+--- /dev/null
++++ b/sdk/objc/native/api/audio_processing_module.mm
+@@ -0,0 +1,14 @@
++#include "audio_processing_module.h"
++
++#include "api/make_ref_counted.h"
++#include "rtc_base/logging.h"
++
++namespace webrtc {
++
++  rtc::scoped_refptr<AudioProcessing> ObjCToNativeAudioProcessingModule(RTCAudioProcessing* objc_audio_processing_module) {
++    RTC_DLOG(LS_INFO) << __FUNCTION__;
++    unsigned long audioProcessor = [objc_audio_processing_module audioProcessing];
++    AudioProcessing* audioProcesSmartPointer = reinterpret_cast<AudioProcessing*>(audioProcessor);
++    return rtc::scoped_refptr<AudioProcessing>(audioProcesSmartPointer);
++  }
++}  // namespace webrtc
