@@ -3,6 +3,8 @@
 @interface AudioProcessor : NSObject
 
 - (instancetype)init;
-+ (void)enableAudioFilter:(BOOL)enable;
+- (void)attachKrispAudioFilter:(NSString*)weightFile size:(unsigned int)size;
+- (void)attachSampleAudioFilter;
+- (void)enableAudioFilter:(BOOL)enable;
 
 @end

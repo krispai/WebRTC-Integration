@@ -38,6 +38,17 @@
 		88D4CEB8297913EA00ED8F17 /* WebRTC-Sample-IOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4CEB7297913EA00ED8F17 /* WebRTC-Sample-IOSUITests.swift */; };
 		88D4CEBA297913EA00ED8F17 /* WebRTC-Sample-IOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4CEB9297913EA00ED8F17 /* WebRTC-Sample-IOSUITestsLaunchTests.swift */; };
 		A46CD3C19D5670375812C298 /* Pods_WebRTC_Sample_IOS_WebRTC_Sample_IOSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E0702FEB167B99D6183F9F /* Pods_WebRTC_Sample_IOS_WebRTC_Sample_IOSUITests.framework */; };
+		F6B8DDC02B9221FC0078BE23 /* KrispAudioSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6B8DDBF2B9221FC0078BE23 /* KrispAudioSDK.xcframework */; };
+		F6B8DDD32B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD02B9268D40078BE23 /* c5.n.s.20949d.kw */; };
+		F6B8DDD42B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD02B9268D40078BE23 /* c5.n.s.20949d.kw */; };
+		F6B8DDD52B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD02B9268D40078BE23 /* c5.n.s.20949d.kw */; };
+		F6B8DDD62B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD12B9268D40078BE23 /* c5.s.w.c9ac8f.kw */; };
+		F6B8DDD72B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD12B9268D40078BE23 /* c5.s.w.c9ac8f.kw */; };
+		F6B8DDD82B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD12B9268D40078BE23 /* c5.s.w.c9ac8f.kw */; };
+		F6B8DDD92B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD22B9268D40078BE23 /* c6.f.s.ced125.kw */; };
+		F6B8DDDA2B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD22B9268D40078BE23 /* c6.f.s.ced125.kw */; };
+		F6B8DDDB2B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */ = {isa = PBXBuildFile; fileRef = F6B8DDD22B9268D40078BE23 /* c6.f.s.ced125.kw */; };
+		F6C05F112B9290F600CCEC13 /* KrispAudioFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = F6C05F0F2B9290F600CCEC13 /* KrispAudioFilter.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +135,13 @@
 		ADD7546BB7A0DD35F477178A /* Pods_WebRTC_Sample_IOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTC_Sample_IOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03F39575D4B817199CD6E7C /* Pods-WebRTC-Sample-IOS-WebRTC-Sample-IOSUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTC-Sample-IOS-WebRTC-Sample-IOSUITests.debug.xcconfig"; path = "Target Support Files/Pods-WebRTC-Sample-IOS-WebRTC-Sample-IOSUITests/Pods-WebRTC-Sample-IOS-WebRTC-Sample-IOSUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		CF9EF3C1832E901EDBA96594 /* Pods-WebRTC-Sample-IOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTC-Sample-IOS.release.xcconfig"; path = "Target Support Files/Pods-WebRTC-Sample-IOS/Pods-WebRTC-Sample-IOS.release.xcconfig"; sourceTree = "<group>"; };
+		F6B8DDB42B920EFD0078BE23 /* AudioFilterInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilterInterface.h; sourceTree = "<group>"; };
+		F6B8DDBF2B9221FC0078BE23 /* KrispAudioSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = KrispAudioSDK.xcframework; sourceTree = "<group>"; };
+		F6B8DDD02B9268D40078BE23 /* c5.n.s.20949d.kw */ = {isa = PBXFileReference; lastKnownFileType = file; path = c5.n.s.20949d.kw; sourceTree = "<group>"; };
+		F6B8DDD12B9268D40078BE23 /* c5.s.w.c9ac8f.kw */ = {isa = PBXFileReference; lastKnownFileType = file; path = c5.s.w.c9ac8f.kw; sourceTree = "<group>"; };
+		F6B8DDD22B9268D40078BE23 /* c6.f.s.ced125.kw */ = {isa = PBXFileReference; lastKnownFileType = file; path = c6.f.s.ced125.kw; sourceTree = "<group>"; };
+		F6C05F0F2B9290F600CCEC13 /* KrispAudioFilter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KrispAudioFilter.mm; sourceTree = "<group>"; };
+		F6C05F102B9290F600CCEC13 /* KrispAudioFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KrispAudioFilter.h; sourceTree = "<group>"; };
 		FB9EFF1FBEF95964F14B34DE /* Pods_WebRTC_Sample_IOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTC_Sample_IOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -133,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88404B4429A78A0E002D61B6 /* WebRTC.xcframework in Frameworks */,
+				F6B8DDC02B9221FC0078BE23 /* KrispAudioSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +232,7 @@
 		88404B3C29A78869002D61B6 /* CustomFrameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6B8DDBE2B921F2E0078BE23 /* krisp */,
 				88404B3D29A78893002D61B6 /* webrtc */,
 			);
 			path = CustomFrameworks;
@@ -229,10 +249,12 @@
 		885058CA29A3B734003F9308 /* AudioProcessor */ = {
 			isa = PBXGroup;
 			children = (
+				F6B8DDB92B9211630078BE23 /* Krisp */,
 				8897D32529AF8FC400098486 /* AudioProcessor.h */,
 				8897D32429AF8FC400098486 /* AudioProcessor.mm */,
 				885058D629A3B839003F9308 /* SampleAudioFilter.h */,
 				885058D729A3B839003F9308 /* SampleAudioFilter.mm */,
+				F6B8DDB42B920EFD0078BE23 /* AudioFilterInterface.h */,
 			);
 			path = AudioProcessor;
 			sourceTree = "<group>";
@@ -341,6 +363,34 @@
 				88D4CEB9297913EA00ED8F17 /* WebRTC-Sample-IOSUITestsLaunchTests.swift */,
 			);
 			path = "WebRTC-Sample-IOSUITests";
+			sourceTree = "<group>";
+		};
+		F6B8DDB92B9211630078BE23 /* Krisp */ = {
+			isa = PBXGroup;
+			children = (
+				F6C05F102B9290F600CCEC13 /* KrispAudioFilter.h */,
+				F6C05F0F2B9290F600CCEC13 /* KrispAudioFilter.mm */,
+			);
+			path = Krisp;
+			sourceTree = "<group>";
+		};
+		F6B8DDBE2B921F2E0078BE23 /* krisp */ = {
+			isa = PBXGroup;
+			children = (
+				F6B8DDC72B92644A0078BE23 /* models */,
+				F6B8DDBF2B9221FC0078BE23 /* KrispAudioSDK.xcframework */,
+			);
+			path = krisp;
+			sourceTree = "<group>";
+		};
+		F6B8DDC72B92644A0078BE23 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				F6B8DDD02B9268D40078BE23 /* c5.n.s.20949d.kw */,
+				F6B8DDD12B9268D40078BE23 /* c5.s.w.c9ac8f.kw */,
+				F6B8DDD22B9268D40078BE23 /* c6.f.s.ced125.kw */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -474,8 +524,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6B8DDD92B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */,
 				88D4CEA3297913EA00ED8F17 /* LaunchScreen.storyboard in Resources */,
 				88D4CEA0297913EA00ED8F17 /* Assets.xcassets in Resources */,
+				F6B8DDD32B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */,
+				F6B8DDD62B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */,
 				88D4CE9E297913E800ED8F17 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,6 +537,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6B8DDDA2B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */,
+				F6B8DDD42B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */,
+				F6B8DDD72B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +547,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6B8DDDB2B9268D40078BE23 /* c6.f.s.ced125.kw in Resources */,
+				F6B8DDD52B9268D40078BE23 /* c5.n.s.20949d.kw in Resources */,
+				F6B8DDD82B9268D40078BE23 /* c5.s.w.c9ac8f.kw in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,6 +665,7 @@
 			files = (
 				885058DB29A3B839003F9308 /* SampleAudioFilter.mm in Sources */,
 				8897D32629AF8FC400098486 /* AudioProcessor.mm in Sources */,
+				F6C05F112B9290F600CCEC13 /* KrispAudioFilter.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,6 +750,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U5R26XM5Z2;
+				GCC_INPUT_FILETYPE = automatic;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -708,6 +769,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U5R26XM5Z2;
+				GCC_INPUT_FILETYPE = automatic;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

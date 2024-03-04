@@ -10,14 +10,23 @@ import AVFoundation
 import WebRTC
 
 final class WebRTCClient: NSObject {
+    
+    private static let audioProcessor: AudioProcessor = {
+        guard let audioProcessor = AudioProcessor() else {
+            fatalError("Failed to initiliaze AudioProcessor")
+        }
+        audioProcessor.attachSampleAudioFilter()
+        return audioProcessor
+    }()
 
     private static let factory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
         let videoDecoderFactory = RTCDefaultVideoDecoderFactory()
-        
-        let audioProcessor = AudioProcessor() as! RTCAudioProcessorDelegate
-        return RTCPeerConnectionFactory.setup(videoEncoderFactory, decoderFactory: videoDecoderFactory, audioProcessorDelegate: audioProcessor)
+        guard let audioProcessorCasted = audioProcessor as? RTCAudioProcessorDelegate else {
+            fatalError("Failed to cast AudioProcessor to RTCAudioProcessorDelegate")
+        }
+        return RTCPeerConnectionFactory.setup(videoEncoderFactory, decoderFactory: videoDecoderFactory, audioProcessorDelegate: audioProcessorCasted)
     }()
     
     private let peerConnection: RTCPeerConnection
@@ -146,7 +155,7 @@ final class WebRTCClient: NSObject {
     }
     
     func enableAudioFilter(enable: Bool) {
-        AudioProcessor.enableAudioFilter(enable)
+        WebRTCClient.audioProcessor.enableAudioFilter(enable)
     }
 }
 

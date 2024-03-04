@@ -2,32 +2,34 @@
 #import <WebRTC/RTCProcessingController.h>
 #import <WebRTC/RTCAudioProcessing.h>
 #import "SampleAudioFilter.h"
+#import "Krisp/KrispAudioFilter.h"
 
-@interface AudioProcessor() <RTCAudioProcessorDelegate>
-
+@interface AudioProcessor() <RTCAudioProcessorDelegate> {
+    std::unique_ptr<SampleAudioFilter> _audioFilter;
+    RTCProcessingController* _processingController;
+}
 @end
 
 @implementation AudioProcessor
 
-std::unique_ptr<SampleAudioFilter> _audioFilter;
-RTCProcessingController* _processingController;
-
 - (instancetype)init {
-    
     self = [super init];
     if (self != nil) {
-        [self initProcessor];
+        _processingController = [[RTCProcessingController alloc] initWithDelegate: self];
     }
     return self;
 }
 
-- (void)initProcessor {
-
+- (void)attachSampleAudioFilter {
     _audioFilter = std::make_unique<SampleAudioFilter>();
-    _processingController = [[RTCProcessingController alloc] initWithDelegate: self];
 }
 
-+ (void)enableAudioFilter:(BOOL)enable
+- (void)attachKrispAudioFilter:(NSString *)weightFile size:(unsigned int)size {
+    //const char * weightFileCString = [weightFile UTF8String];
+    //_audioFilter = std::make_unique<KrispAudioFilter>(weightFileCString, size);
+}
+
+- (void)enableAudioFilter:(BOOL)enable
 {
     _audioFilter->enable(enable);
 }
