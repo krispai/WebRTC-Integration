@@ -3,5 +3,11 @@ app/src/main/res/raw/*.kw
 app/build/*
 app/src/main/jniLibs/arm64-v8a/libc++_shared.so
 app/src/main/jniLibs/arm64-v8a/libkrisp-audio-sdk.so
+app/src/main/jniLibs/armeabi-v7a/libc++_shared.so
+app/src/main/jniLibs/armeabi-v7a/libkrisp-audio-sdk.so
+app/src/main/jniLibs/x86/libc++_shared.so
+app/src/main/jniLibs/x86/libkrisp-audio-sdk.so
+app/src/main/jniLibs/x86_64/libc++_shared.so
+app/src/main/jniLibs/x86_64/libkrisp-audio-sdk.so
 .idea/*
 .gradle/*
