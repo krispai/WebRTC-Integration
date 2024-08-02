@@ -9,7 +9,7 @@
 
     <View
         android:id="@+id/TopContainerView"
-        android:layout_height="80dp"
+        android:layout_height="140dp"
         android:layout_width="wrap_content"
         android:background="#FAFBFC"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,22 +18,55 @@
         app:layout_constraintTop_toTopOf="parent"
     />
 
+    <TextView
+        android:id="@+id/SignalingStatusLabel"
+        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Signaling status"
+        app:layout_constraintStart_toStartOf="@+id/TopContainerView"
+        app:layout_constraintTop_toTopOf="@+id/TopContainerView" />
+
+    <TextView
+        android:id="@+id/SignalingStatusValue"
+        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="10dp"
+        android:text="Not Connected"
+        app:layout_constraintStart_toStartOf="@+id/SignalingStatusLabel"
+        app:layout_constraintTop_toTopOf="@+id/TopContainerView" />
+
     <Button
-        android:id="@+id/callButton"
+        android:id="@+id/SendOfferButton"
         android:layout_width="128dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:text="Make Call"
+        android:layout_marginTop="40dp"
+        android:text="Send Offer"
+        android:textSize="10sp"
         app:layout_constraintStart_toStartOf="@+id/TopContainerView"
         app:layout_constraintTop_toTopOf="@+id/TopContainerView" />
+
+    <Button
+        android:id="@+id/SendAnswerButton"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:text="Send Answer"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@+id/TopContainerView"
+        app:layout_constraintTop_toTopOf="@+id/TopContainerView" />
+
 
     <Switch
         android:id="@+id/KrispEnableNC"
         android:layout_width="120dp"
         android:layout_height="48dp"
         android:layout_marginStart="180dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:text="Enable NC"
         app:layout_constraintStart_toStartOf="@+id/TopContainerView"
         app:layout_constraintTop_toTopOf="@+id/TopContainerView" />

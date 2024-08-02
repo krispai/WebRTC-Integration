@@ -27,7 +27,9 @@ import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceViewRenderer
 
+import androidx.appcompat.app.AlertDialog
 import android.widget.Button
+import android.widget.TextView
 import android.widget.ProgressBar
 import krisp.ai.krwebrtc.services.signaling.AppSdpObserver
 import krisp.ai.krwebrtc.services.signaling.SignallingClient
@@ -51,7 +53,9 @@ final class MainActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var callButton: Button
+    private lateinit var signalingStatus: TextView
+    private lateinit var sendOfferButton: Button
+    private lateinit var sendAnswerButton: Button
     private lateinit var localView: SurfaceViewRenderer
     private lateinit var remoteView: SurfaceViewRenderer
     private lateinit var remoteViewLoading: ProgressBar
@@ -72,7 +76,11 @@ final class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        callButton = findViewById(R.id.callButton)
+        signalingStatus = findViewById(R.id.SignalingStatusValue)
+        sendOfferButton = findViewById(R.id.SendOfferButton)
+        sendAnswerButton = findViewById(R.id.SendAnswerButton)
+        sendAnswerButton.isEnabled = false
+
         localView = findViewById(R.id.localClientView)
         remoteView = findViewById(R.id.remoteClientView)
         remoteViewLoading = findViewById(R.id.remoteViewSpinner)
@@ -117,7 +125,10 @@ final class MainActivity : AppCompatActivity() {
         val modelFilePath = getRawResourceFilePath(this, R.raw.model)
         val nativeLibraryPath = getKrispDLLPath(this)
         val krispDllpath = "libkrisp-audio-sdk.so"
-        audioProcessorModule.Init(modelFilePath, krispDllpath)
+        var retValue = audioProcessorModule.Init(modelFilePath, krispDllpath)
+        if (!retValue) {
+            return null
+        }
         audioProcessorModule.Enable(switchEnable.isChecked)
         return audioProcessorModule
     }
@@ -129,35 +140,58 @@ final class MainActivity : AppCompatActivity() {
         return tempFile.absolutePath
     }
 
+    private fun showAlertDialog(message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Alert")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
     private fun onStartCommunicationSession() {
         var krispProcessor = getKrispProcessor()
-        rtcClient = WebRTCClient(
-            application,
-            object : PeerConnectionObserver() {
-                override fun onIceCandidate(p0: IceCandidate?) {
-                    super.onIceCandidate(p0)
-                    signallingClient.send(p0)
-                    rtcClient.addIceCandidate(p0)
-                }
-
-                override fun onTrack(transceiver: RtpTransceiver?) {
-                    super.onTrack(transceiver)
-                    if (transceiver?.receiver?.track() is VideoTrack) {
-                        (transceiver.receiver.track() as VideoTrack).addSink(remoteView)
+        if (krispProcessor == null) {
+            showAlertDialog("Unable initialize Krisp SDK")
+        } else {
+            rtcClient = WebRTCClient(
+                application,
+                object : PeerConnectionObserver() {
+                    override fun onIceCandidate(p0: IceCandidate?) {
+                        super.onIceCandidate(p0)
+                        signallingClient.send(p0)
+                        rtcClient.addIceCandidate(p0)
                     }
-                }
-            },
-            krispProcessor,
-        )
-        rtcClient.initSurfaceView(remoteView)
-        rtcClient.initSurfaceView(localView)
-        rtcClient.startLocalVideoCapture(localView)
 
-        signallingClient = SignallingClient(createSignallingClientListener())
-        callButton.setOnClickListener {
-            rtcClient.call(sdpObserver)
+                    override fun onTrack(transceiver: RtpTransceiver?) {
+                        super.onTrack(transceiver)
+                        if (transceiver?.receiver?.track() is VideoTrack) {
+                            (transceiver.receiver.track() as VideoTrack).addSink(remoteView)
+                        }
+                    }
+                },
+                krispProcessor,
+            )
+            rtcClient.initSurfaceView(remoteView)
+            rtcClient.initSurfaceView(localView)
+            rtcClient.startLocalVideoCapture(localView)
+
+            signallingClient = SignallingClient(createSignallingClientListener())
+            sendOfferButton.setOnClickListener {
+                rtcClient.call(sdpObserver)
+            }
+
+            sendAnswerButton.setOnClickListener {
+                rtcClient.call(sdpObserver)
+            }
+         }
         }
-    }
 
     private fun requestPermissions() {
         val permissionsNeeded = mutableListOf<String>()
@@ -184,7 +218,11 @@ final class MainActivity : AppCompatActivity() {
 
     private fun createSignallingClientListener() = object : SignallingClientListener {
         override fun onConnectionEstablished() {
-            callButton.isClickable = true
+            runOnUiThread {
+                signalingStatus.text = "Connected"
+                sendOfferButton.isClickable = true
+                sendAnswerButton.isEnabled = true
+            }
         }
 
         override fun onOfferReceived(description: SessionDescription) {
