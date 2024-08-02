@@ -43,6 +43,7 @@ final class MainActivity : AppCompatActivity() {
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
         init {
             try {
+                System.loadLibrary("c++_shared");
                 System.loadLibrary("jingle_peerconnection_so")
                 System.loadLibrary("krisp-audio-sdk")
             } catch (e: UnsatisfiedLinkError) {
@@ -101,10 +102,6 @@ final class MainActivity : AppCompatActivity() {
         PeerConnectionFactory.initialize(initializationOptions)
     }
 
-    fun getKrispDLLPath(context: Context): String {
-        return context.applicationInfo.nativeLibraryDir
-    }
-
     fun listDirectoryContents(directoryPath: String) {
         val directory = File(directoryPath)
         if (directory.exists() && directory.isDirectory) {
@@ -121,9 +118,8 @@ final class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getKrispProcessor() : AudioProcessingFactory {
+    private fun getKrispProcessor() : KrispAudioProcessingImpl? {
         val modelFilePath = getRawResourceFilePath(this, R.raw.model)
-        val nativeLibraryPath = getKrispDLLPath(this)
         val krispDllpath = "libkrisp-audio-sdk.so"
         var retValue = audioProcessorModule.Init(modelFilePath, krispDllpath)
         if (!retValue) {
@@ -135,7 +131,7 @@ final class MainActivity : AppCompatActivity() {
 
     fun getRawResourceFilePath(context: Context, resourceId: Int): String {
         val inputStream: InputStream = context.resources.openRawResource(resourceId)
-        val tempFile = File(context.cacheDir, "model.kw")
+        val tempFile = File(context.cacheDir, "c6.f.s.ced125.kw")
         tempFile.outputStream().use { inputStream.copyTo(it) }
         return tempFile.absolutePath
     }
