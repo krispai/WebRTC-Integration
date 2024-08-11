@@ -11,3 +11,4 @@ app/src/main/jniLibs/x86_64/libc++_shared.so
 app/src/main/jniLibs/x86_64/libkrisp-audio-sdk.so
 .idea/*
 .gradle/*
+local.properties

@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc
+package krisp.ai.android.webrtc
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,13 +29,15 @@ import org.webrtc.SurfaceViewRenderer
 
 import androidx.appcompat.app.AlertDialog
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.ProgressBar
-import krisp.ai.krwebrtc.services.signaling.AppSdpObserver
-import krisp.ai.krwebrtc.services.signaling.SignallingClient
-import krisp.ai.krwebrtc.services.signaling.SignallingClientListener
-import krisp.ai.krwebrtc.services.webrtc.PeerConnectionObserver
-import krisp.ai.krwebrtc.services.webrtc.WebRTCClient
+import krisp.ai.android.webrtc.services.signaling.AppSdpObserver
+import krisp.ai.android.webrtc.services.signaling.SignallingClient
+import krisp.ai.android.webrtc.services.signaling.SignallingClientListener
+import krisp.ai.android.webrtc.services.webrtc.PeerConnectionObserver
+import krisp.ai.android.webrtc.services.webrtc.WebRTCClient
+import krisp.ai.android.webrtc.R
 
 final class MainActivity : AppCompatActivity() {
 
@@ -119,7 +121,7 @@ final class MainActivity : AppCompatActivity() {
     }
 
     private fun getKrispProcessor() : KrispAudioProcessingImpl? {
-        val modelFilePath = getRawResourceFilePath(this, R.raw.model)
+        val modelFilePath = getRawResourceFilePath(this, R.raw.model32)
         val krispDllpath = "libkrisp-audio-sdk.so"
         var retValue = audioProcessorModule.Init(modelFilePath, krispDllpath)
         if (!retValue) {
@@ -151,6 +153,23 @@ final class MainActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+//    private fun openHostAddressInputDialog() {
+//        val builder = AlertDialog.Builder(this)
+//        val inflater = layoutInflater
+//        val view = inflater.inflate(R.layout.host_address_dialog, null)
+//        val ipAddressInput = view.findViewById<EditText>(R.id.ipAddressInput)
+//        val portInput = view.findViewById<EditText>(R.id.portInput)
+//        builder.setView(view)
+//            .setPositiveButton("OK") { dialog, id ->
+//                val ip = ipAddressInput.text.toString()
+//                val port = portInput.text.toString().toIntOrNull() ?: 0
+//            }
+//            .setNegativeButton("Cancel") { dialog, id ->
+//                dialog.cancel()
+//            }
+//        builder.create().show()
+//    }
+
     private fun onStartCommunicationSession() {
         var krispProcessor = getKrispProcessor()
         if (krispProcessor == null) {
@@ -178,7 +197,10 @@ final class MainActivity : AppCompatActivity() {
             rtcClient.initSurfaceView(localView)
             rtcClient.startLocalVideoCapture(localView)
 
-            signallingClient = SignallingClient(createSignallingClientListener())
+            val hostAddress = "192.168.10.92"
+            val hostPort: Int = 8085
+
+            signallingClient = SignallingClient(createSignallingClientListener(), hostAddress, hostPort)
             sendOfferButton.setOnClickListener {
                 rtcClient.call(sdpObserver)
             }

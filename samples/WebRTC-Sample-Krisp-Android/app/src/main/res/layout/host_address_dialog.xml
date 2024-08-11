@@ -1,0 +1,21 @@
+<!-- res/layout/dialog_input.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/ipAddressInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="IP Address"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/portInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port"
+        android:inputType="number"/>
+</LinearLayout>

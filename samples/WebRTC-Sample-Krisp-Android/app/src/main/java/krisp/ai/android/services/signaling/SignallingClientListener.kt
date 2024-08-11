@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc.services.signaling
+package krisp.ai.android.webrtc.services.signaling
 
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription

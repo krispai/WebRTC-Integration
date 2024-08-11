@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'krisp.ai.krwebrtc'
+    namespace 'krisp.ai.android.webrtc'
     compileSdk 33
 
     defaultConfig {
-        applicationId "krisp.ai.krwebrtc"
+        applicationId "krisp.ai.android.webrtc.app"
         minSdk 24
         targetSdk 33
         versionCode 1

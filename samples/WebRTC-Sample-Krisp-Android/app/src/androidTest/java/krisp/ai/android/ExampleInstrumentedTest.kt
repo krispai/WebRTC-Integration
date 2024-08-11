@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc
+package krisp.ai.android.webrtc
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

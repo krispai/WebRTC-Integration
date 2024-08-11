@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc.services.signaling
+package krisp.ai.android.webrtc.services.signaling
 
 import android.util.Log
 import io.ktor.client.*
@@ -19,12 +19,10 @@ import org.webrtc.SessionDescription
 
 
 class SignallingClient(
-    private val listener: SignallingClientListener
+    private val listener: SignallingClientListener,
+    private val hostAddress: String,
+    private val hostPort: Int
 ) : CoroutineScope {
-
-    companion object {
-        private const val HOST_ADDRESS = "192.168.10.30"
-    }
 
     private val job = Job()
 
@@ -47,7 +45,7 @@ class SignallingClient(
 
     private fun connect() = launch {
         try {
-            client.webSocket(method = HttpMethod.Get, host = HOST_ADDRESS, port = 8085, path = "/connect") {
+            client.webSocket(method = HttpMethod.Get, host = hostAddress, port = hostPort, path = "/connect") {
                 listener.onConnectionEstablished()
                 launch {
                     sendChannel.collectLatest { message ->

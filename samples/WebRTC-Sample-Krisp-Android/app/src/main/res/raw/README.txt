@@ -1,1 +1,1 @@
-Please copy the c6.f.s.ced125.kw model file to this folder.
+Please copy the c6.f.s.ced125.kw model file to this folder and rename it to model32.kw

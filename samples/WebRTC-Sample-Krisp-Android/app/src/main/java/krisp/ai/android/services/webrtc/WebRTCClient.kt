@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc.services.webrtc
+package krisp.ai.android.webrtc.services.webrtc
 
 import android.app.Application
 import android.content.Context

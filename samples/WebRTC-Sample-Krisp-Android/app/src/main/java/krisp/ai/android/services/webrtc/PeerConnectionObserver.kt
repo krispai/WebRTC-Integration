@@ -1,4 +1,4 @@
-package krisp.ai.krwebrtc.services.webrtc
+package krisp.ai.android.webrtc.services.webrtc
 
 import org.webrtc.DataChannel
 import org.webrtc.IceCandidate
