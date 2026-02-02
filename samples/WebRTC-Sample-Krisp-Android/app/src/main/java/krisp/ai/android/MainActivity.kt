@@ -7,7 +7,7 @@ import android.widget.Switch
 
 import android.Manifest
 
-import org.webrtc.KrispAudioProcessingImpl
+import org.webrtc.KrispAudioProcessingFactory
 import org.webrtc.*
 import org.webrtc.PeerConnectionFactory
 
@@ -42,12 +42,15 @@ import krisp.ai.android.webrtc.R
 final class MainActivity : AppCompatActivity() {
 
     companion object {
+        private val krispDllPath: String = "libkrisp-audio-sdk.so"
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
         init {
             try {
-                System.loadLibrary("c++_shared");
+                //System.loadLibrary("c++_shared");
                 System.loadLibrary("jingle_peerconnection_so")
                 System.loadLibrary("krisp-audio-sdk")
+                KrispAudioProcessingFactory.LoadKrisp(krispDllPath)
+
             } catch (e: UnsatisfiedLinkError) {
                 Log.e("LibraryLoad", "Failed to load native library: ${e.message}")
             } catch (e: Exception) {
@@ -55,7 +58,6 @@ final class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private lateinit var signalingStatus: TextView
     private lateinit var sendOfferButton: Button
     private lateinit var sendAnswerButton: Button
@@ -66,7 +68,7 @@ final class MainActivity : AppCompatActivity() {
 
     private lateinit var rtcClient: WebRTCClient
     private lateinit var signallingClient: SignallingClient
-    private var audioProcessorModule = KrispAudioProcessingImpl()
+    private var audioProcessorModule = KrispAudioProcessingFactory()
 
     private val sdpObserver = object : AppSdpObserver() {
         override fun onCreateSuccess(p0: SessionDescription?) {
@@ -120,10 +122,11 @@ final class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getKrispProcessor() : KrispAudioProcessingImpl? {
-        val modelFilePath = getRawResourceFilePath(this, R.raw.model32)
-        val krispDllpath = "libkrisp-audio-sdk.so"
-        var retValue = audioProcessorModule.Init(modelFilePath, krispDllpath)
+    private fun getKrispProcessor() : KrispAudioProcessingFactory? {
+        val modelFilePath = getRawResourceFilePath(this, R.raw.krisp_nc_o_lite_v1)
+
+        //audioProcessorModule.createNative();
+        var retValue = audioProcessorModule.Init(modelFilePath)
         if (!retValue) {
             return null
         }
@@ -133,7 +136,7 @@ final class MainActivity : AppCompatActivity() {
 
     fun getRawResourceFilePath(context: Context, resourceId: Int): String {
         val inputStream: InputStream = context.resources.openRawResource(resourceId)
-        val tempFile = File(context.cacheDir, "c6.f.s.ced125.kw")
+        val tempFile = File(context.cacheDir, "krisp_nc_o_lite_v1.kef")
         tempFile.outputStream().use { inputStream.copyTo(it) }
         return tempFile.absolutePath
     }
